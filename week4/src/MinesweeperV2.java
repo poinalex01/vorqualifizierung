@@ -75,8 +75,6 @@ void main() {
             System.out.printf("\nVAL: %d-> %d", originalVal, newlyOpened);
             rounds += newlyOpened;
         }
-
-        rounds++;
     } while (!gameOver);
 
     System.out.println("Das... war eine Mine. Du hast leider verloren.");
