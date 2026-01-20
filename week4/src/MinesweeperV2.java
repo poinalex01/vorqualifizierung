@@ -24,11 +24,12 @@ void main() {
     int possibleFields = GRID_SIZE * GRID_SIZE;
     int safeFields = possibleFields - mineCount;
     do {
-        print(map);
+        print(map, rounds, safeFields, mineCount);
 
-        double progress = (double) (rounds - 1) * 100 / safeFields;
-        System.out.printf("\nDu hast %d/%d (%.2f %%) des nicht verminten Gebiets auf Minen gecheckt", rounds - 1, safeFields, progress);
-        System.out.printf("\nEs bleiben noch %d Minen versteckt.", mineCount);
+       /* if (safeFields) {
+            System.out.println("Du hast gewonnen!");
+        }
+        */
 
         String wantedCoordinate;
         Pattern pattern = Pattern.compile("[A-J][0-9]");
@@ -48,7 +49,7 @@ void main() {
         if (map[x][y] == 0) {
             map[x][y] = 100;
             gameOver = true;
-            print(map);
+            print(map, rounds, safeFields, mineCount);
         } else {
             int originalVal = map[x][y];
             int val = Math.abs(originalVal);
@@ -81,7 +82,7 @@ void main() {
     System.out.println("Das... war eine Mine. Du hast leider verloren.");
 }
 
-private void print(int[][] map) {
+private void print(int[][] map, int rounds, int safeFields, int mineCount) {
     char c = 'A';
     System.out.println();
     StringBuilder x = new StringBuilder("\t" + " ");
@@ -108,4 +109,8 @@ private void print(int[][] map) {
         }
         System.out.println(currentLine);
     }
+
+    double progress = (double) (rounds - 1) * 100 / safeFields;
+    System.out.printf("\nDu hast %d/%d (%.2f %%) des nicht verminten Gebiets auf Minen gecheckt", rounds - 1, safeFields, progress);
+    System.out.printf("\nEs bleiben noch %d Minen versteckt.", mineCount);
 }
