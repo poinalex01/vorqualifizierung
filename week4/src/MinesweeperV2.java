@@ -42,8 +42,8 @@ void main() {
         } while (!pattern.matcher(wantedCoordinate).find() || wantedCoordinate.length() != 2);
 
 
-        int y = Character.toUpperCase(wantedCoordinate.charAt(0)) - 'A';
-        int x = Integer.parseInt(String.valueOf(wantedCoordinate.charAt(1)));
+        int y = wantedCoordinate.charAt(0) - 'A';
+        int x = wantedCoordinate.charAt(1) - '0';
         System.out.printf("User input: %d/%d\n", x, y);
 
         if (map[x][y] == 0) {
@@ -77,7 +77,7 @@ void main() {
         }
     } while (!gameOver);
 
-    System.out.println("Das... war eine Mine. Du hast leider verloren.");
+    System.out.println("\nDas... war eine Mine. Du hast leider verloren.");
 }
 
 private void print(int[][] map, int rounds, int safeFields, int mineCount) {
