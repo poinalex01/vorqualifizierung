@@ -14,18 +14,9 @@ void main() {
         } while (currentLevel < 0 || currentLevel > 3);
 
         switch (currentLevel) {
-            case 1: {
-                levelOne();
-                break;
-            }
-            case 2: {
-                levelTwo();
-                break;
-            }
-            case 3: {
-                levelThree();
-                break;
-            }
+            case 1 -> levelOne();
+            case 2 -> levelTwo();
+            case 3 -> levelThree();
         }
 
     } while (currentLevel != 0);
@@ -108,7 +99,7 @@ private void levelThree() {
     do {
         int input;
         if (aiTurn) {
-            input = min + (max - min) / 2;
+            input = (max + min) >> 1;
             System.out.println("Die KI wählt: " + input);
         } else {
             System.out.println("Du hast noch " + tries + " Versuche!");
@@ -125,10 +116,10 @@ private void levelThree() {
         }
 
         if (input > randomNumber) {
-            max = Math.min(input, max);
+            max = Math.min(input - 1, max);
             System.out.println("Kleiner");
         } else if (input < randomNumber) {
-            min = Math.max(input, min);
+            min = Math.max(input + 1, min);
             System.out.println("Größer");
         } else {
             System.out.println("Erraten");
