@@ -6,7 +6,7 @@ void main() {
 
     String normalized = normalize(original);
     String encrypted = crypt(normalized, pass, true);
-    String decrypted = crypt(normalized, pass, false);
+    String decrypted = crypt(encrypted, pass, false);
 
     System.out.println("str: " + original);
     System.out.println("normalized: " + normalized);
@@ -19,7 +19,7 @@ static String crypt(String text, String pass, boolean encrypt) {
 
     int keyIndex = 0;
     for (int i = 0; i < chars.length; i++) {
-        int key = pass.charAt(i) - 'A';
+        int key = pass.charAt(keyIndex) - 'A';
         int shift;
 
         if (encrypt) shift = key;
