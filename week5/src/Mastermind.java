@@ -95,32 +95,16 @@ static int[] createSecret() {
  */
 static int[] readUserInput() {
     Scanner scanner = new Scanner(System.in);
-    System.out.println("Enter a 4-digit number between 1 and 6 (e.g \"1234\", \"3456\")");
-
     int[] inputArray = new int[4];
     String input;
-    boolean isValid = false;
+
     do {
-        input = scanner.nextLine();
-        if (input.length() != 4) {
-            System.out.println("Invalid input length!");
-        } else {
-            char[] charArray = input.toCharArray();
+        System.out.println("Enter a 4-digit number between 1 and 6 (e.g \"1234\", \"3456\")");
+        input = scanner.next();
 
-            for (int i = 0; i < charArray.length; i++) {
-                char currentChar = charArray[i];
-                int currentNumber = Integer.parseInt(String.valueOf(currentChar));
-
-                if (currentNumber <= 0 || currentNumber >= 7) {
-                    System.out.println("Invalid input!");
-                    break;
-                } else {
-                    inputArray[i] = currentNumber;
-                    if (i == 3) isValid = true;
-                }
-            }
-        }
-    } while (!isValid);
+        if (!input.matches("[1-6]{4}"))
+            System.out.println("Invalid Input!");
+    }while (!input.matches("[1-6]{4}"));
 
     return inputArray;
 }
