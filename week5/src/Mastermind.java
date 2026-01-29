@@ -102,13 +102,20 @@ static int[] readUserInput() {
         System.out.println("Enter a 4-digit number between 1 and 6 (e.g \"1234\", \"3456\")");
         input = scanner.next();
 
-        if (!input.matches("[1-6]{4}"))
+        if (!input.matches("[1-6]{4}")) {
             System.out.println("Invalid Input!");
-    }while (!input.matches("[1-6]{4}"));
+            continue;
+        }
+
+        char[] charArray = input.toCharArray();
+        for (int i = 0; i < charArray.length; i++) {
+            char currentChar = charArray[i];
+            inputArray[i] = Integer.parseInt(String.valueOf(currentChar));
+        }
+    } while (!input.matches("[1-6]{4}"));
 
     return inputArray;
 }
-
 
 /**
  * Prints the current state of the game board.
