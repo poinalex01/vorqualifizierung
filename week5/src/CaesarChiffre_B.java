@@ -42,32 +42,6 @@ static String crypt(String text, String pass, boolean encrypt) {
     return sb.toString();
 }
 
-/*
-static String crypt(String text, String pass, boolean encrypt) {
-    char[] chars = text.toCharArray();
-    int keyIndex = 0;
-    int i = encrypt ? 0 : chars.length - 1;
-    while (i < chars.length) {
-        char a = (char) (chars[i] + pass.charAt(keyIndex));
-        if (keyIndex >= pass.length()-1) keyIndex = 0;
-        else if (keyIndex ) {
-            
-        }
-
-        if (a > 'Z' && encrypt) {
-            a -= 26;
-        }else if (a < 'A' && !encrypt) {
-            a += 26;
-        }
-
-        i++;
-        keyIndex++;
-        text = text.substring(0, i) + a + text.substring(i + 1);
-    }
-    return text;
-}*/
-
-
 static String normalize(String text) {
     text = text.toUpperCase();
 
@@ -80,6 +54,8 @@ static String normalize(String text) {
 }
 
 static String encrypt(String text, int key) {
+    StringBuilder sb = new StringBuilder();
+
     char[] chars = text.toCharArray();
     for (int i = 0; i < chars.length; i++) {
         char a = (char) (chars[i] + key);
@@ -87,22 +63,11 @@ static String encrypt(String text, int key) {
         if (a > 'Z')
             a -= 26;
 
-        text = text.substring(0, i) + a + text.substring(i + 1);
+        sb.append(text, 0, i).append(a).append(text.substring(i + 1));
     }
-    return text;
+    return sb.toString();
 }
 
 static String decrypt(String text, int key) {
-    key *= -1; // negative key
-
-    char[] chars = text.toCharArray();
-    for (int i = 0; i < chars.length; i++) {
-        char a = (char) (chars[i] + key);
-
-        if (a < 'A')
-            a += 26;
-
-        text = text.substring(0, i) + a + text.substring(i + 1);
-    }
-    return text;
+    return encrypt(text, key-3);
 }
