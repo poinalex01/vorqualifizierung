@@ -1,13 +1,13 @@
 import java.awt.*;
 
-static final int LENGTH = 100;
+static final int LENGTH = 101;
 static final int TRY_AMOUNT = 9;
 
 void main() {
     Scanner scanner = new Scanner(System.in);
     Random random = new Random();
     int secret = random.nextInt(100);
-    secret = 20;
+    secret = 63;
     boolean aiTurn = random.nextBoolean();
     aiTurn = false;
 
@@ -20,10 +20,23 @@ void main() {
     int tries = TRY_AMOUNT;
     do {
         if (aiTurn) {
-            if (!numbers.isEmpty()) {
-                guess = numbers.get(numbers.size() / 2);
+            if (!guessList.isEmpty()) {
+                int bestGuess = numbers.get(numbers.size() / 2);
+                double maxMinDistance = 0;
+
+                for (int n : numbers) {
+                    double minDistance = LENGTH;
+                    for (int prevGuess : guessList) {
+                        minDistance = Math.min(minDistance, Math.abs(n - prevGuess));
+                    }
+                    if (minDistance > maxMinDistance) {
+                        maxMinDistance = minDistance;
+                        bestGuess = n;
+                    }
+                }
+                guess = bestGuess;
             } else {
-                guess = 50;
+                guess = LENGTH >> 1;
             }
             System.out.println("Die KI wählt: " + guess);
         } else {
@@ -40,6 +53,7 @@ void main() {
             tries--;
         }
         guessList.add(guess);
+        System.out.println("secret:" + secret);
 
         int difference = Math.abs(guess - secret);
         String feedbackText;
@@ -47,18 +61,25 @@ void main() {
             System.out.println("Erraten");
             return;
         } else if (difference <= 3) {
-            feedbackText = ("„fast da“: zwischen 1 und 3 daneben.");
-            removeRange(numbers, 0, secret - 4);
+            feedbackText = "„fast da“: zwischen 1 und 3 daneben.";
+            removeRange(numbers, 0, Math.max(0, guess - 4));
+            removeRange(numbers, Math.min(LENGTH, guess + 4), LENGTH);
         } else if (difference <= 10) {
-            feedbackText = ("„relativ nahe“: zwischen 4 und 10 daneben");
-            removeRange(numbers, guess - 10, guess + 10);
+            feedbackText = "„relativ nahe“: zwischen 4 und 10 daneben";
+            removeRange(numbers, Math.max(0, guess - 3), Math.min(LENGTH, guess + 3)); // Changed guess + 4 to guess + 3
+            removeRange(numbers, 0, Math.max(0, guess - 11));
+            removeRange(numbers, Math.min(LENGTH, guess + 11), LENGTH);
         } else if (difference <= 20) {
-            feedbackText = ("„Nicht ganz so weit weg“: zwischen 11 und 20 daneben");
-            removeRange(numbers, guess - 20, guess + 20);
+            feedbackText = "„Nicht ganz so weit weg“: zwischen 11 und 20 daneben";
+            removeRange(numbers, Math.max(0, guess - 10), Math.min(LENGTH, guess + 10));
+            removeRange(numbers, 0, Math.max(0, guess - 21)); // Changed guess - 20 to guess - 21
+            removeRange(numbers, Math.min(LENGTH, guess + 21), LENGTH); // Changed guess + 20 to guess + 21
         } else {
             feedbackText = "„Weit weg“: mehr als 20 daneben";
-            removeRange(numbers, secret + 20, LENGTH);
+            removeRange(numbers, Math.max(0, guess - 21), Math.min(LENGTH, guess + 21)); // Changed guess - 20 and guess + 20 to guess - 21 and guess + 21
         }
+
+        numbers.remove(Integer.valueOf(guess));
         System.out.println("Verbleibende Elemente: " + numbers);
 
         aiTurn = !aiTurn;
