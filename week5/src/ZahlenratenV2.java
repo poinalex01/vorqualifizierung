@@ -7,9 +7,7 @@ void main() {
     Scanner scanner = new Scanner(System.in);
     Random random = new Random();
     int secret = random.nextInt(100);
-    secret = 63;
     boolean aiTurn = random.nextBoolean();
-    aiTurn = false;
 
     ArrayList<Integer> numbers = new ArrayList<>();
     for (int i = 0; i <= LENGTH; i++)
@@ -66,17 +64,17 @@ void main() {
             removeRange(numbers, Math.min(LENGTH, guess + 4), LENGTH);
         } else if (difference <= 10) {
             feedbackText = "„relativ nahe“: zwischen 4 und 10 daneben";
-            removeRange(numbers, Math.max(0, guess - 3), Math.min(LENGTH, guess + 3)); // Changed guess + 4 to guess + 3
+            removeRange(numbers, Math.max(0, guess - 3), Math.min(LENGTH, guess + 3));
             removeRange(numbers, 0, Math.max(0, guess - 11));
             removeRange(numbers, Math.min(LENGTH, guess + 11), LENGTH);
         } else if (difference <= 20) {
             feedbackText = "„Nicht ganz so weit weg“: zwischen 11 und 20 daneben";
             removeRange(numbers, Math.max(0, guess - 10), Math.min(LENGTH, guess + 10));
-            removeRange(numbers, 0, Math.max(0, guess - 21)); // Changed guess - 20 to guess - 21
-            removeRange(numbers, Math.min(LENGTH, guess + 21), LENGTH); // Changed guess + 20 to guess + 21
+            removeRange(numbers, 0, Math.max(0, guess - 21));
+            removeRange(numbers, Math.min(LENGTH, guess + 21), LENGTH);
         } else {
             feedbackText = "„Weit weg“: mehr als 20 daneben";
-            removeRange(numbers, Math.max(0, guess - 21), Math.min(LENGTH, guess + 21)); // Changed guess - 20 and guess + 20 to guess - 21 and guess + 21
+            removeRange(numbers, Math.max(0, guess - 21), Math.min(LENGTH, guess + 21));
         }
 
         numbers.remove(Integer.valueOf(guess));
