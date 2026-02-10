@@ -66,16 +66,19 @@ static int[] createNumbers() {
  * @return the count of equal elements
  */
 static int countEquals(int[] a1, int[] a2) {
-    int ctr = 0;
+    int ctr = 0, i1 = 0, i2 = 0;
 
-    for (int i : a1) {
-        for (int j : a2) {
-            if (i == j) {
-                ctr++;
-            }
+    while (i1 < a1.length && i2 < a2.length) {
+        if (a1[i1] == a2[i2]) {
+            ctr++;
+            i1++;
+            i2++;
+        } else if (a1[i1] < a2[i2]) {
+            i1++;
+        } else {
+            i2++;
         }
     }
-
     return ctr;
 }
 
