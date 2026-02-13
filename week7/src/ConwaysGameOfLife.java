@@ -1,19 +1,31 @@
-final int GRID_SIZE_X = 10, GRID_SIZE_Y = 10;
-
-
 void main() throws InterruptedException {
+    /*
     boolean[][] currentGrid = new boolean[GRID_SIZE_Y][GRID_SIZE_X];
     fillGridRandomly(currentGrid);
+    */
+    boolean[][] currentGrid = getTestPattern(3);
 
-    boolean[][] nextGrid = new boolean[GRID_SIZE_Y][GRID_SIZE_X];
+    boolean[][] nextGrid = new boolean[currentGrid.length][currentGrid[0].length];
+    Set<String> history = new HashSet<>();
 
-    int maxGenerations = 50;
     int generationCounter = 0;
 
-    for (int generation = 0; generation < maxGenerations; generation++) {
+    while (true) {
         print(currentGrid);
+        String state = getStateAsString(currentGrid);
         System.out.println("Generation: " + generationCounter++);
         System.out.println();
+
+        if (history.contains(state)) {
+            System.out.println("Pattern repeated");
+            return;
+        }
+        history.add(state);
+
+        if (isAllDead(currentGrid)) {
+            System.out.println("Every cell died");
+            return;
+        }
 
         getNextGeneration(currentGrid, nextGrid);
 
@@ -21,7 +33,7 @@ void main() throws InterruptedException {
         currentGrid = nextGrid;
         nextGrid = temp;
 
-        Thread.sleep(500);
+        Thread.sleep(750);
     }
 }
 
@@ -60,9 +72,9 @@ int countNeighbours(boolean[][] grid, int row, int col) {
     for (int dr = -1; dr <= 1; dr++) {
         for (int dc = -1; dc <= 1; dc++) {
 
-            if (dr == 0 && dc == 0)
-                continue;
+            if (dr == 0 && dc == 0) continue;
 
+            /*
             int neighbourRow = row + dr;
             int neighbourCol = col + dc;
 
@@ -72,6 +84,12 @@ int countNeighbours(boolean[][] grid, int row, int col) {
                 if (grid[neighbourRow][neighbourCol])
                     count++;
             }
+            */
+
+            int neighbourRow = (row + dr + grid.length) % grid.length;
+            int neighbourCol = (col + dc + grid[0].length) % grid[0].length;
+
+            if (grid[neighbourRow][neighbourCol]) count++;
         }
     }
 
@@ -121,6 +139,12 @@ void print(boolean[][] grid) {
     }
 }
 
+/**
+ * checks if all cells are dead
+ *
+ * @param grid world array
+ * @return bool
+ */
 boolean isAllDead(boolean[][] grid) {
     for (boolean[] row : grid) {
         for (boolean isAlive : row) {
@@ -130,4 +154,54 @@ boolean isAllDead(boolean[][] grid) {
         }
     }
     return true;
+}
+
+/**
+ * creates a string of 0 and 1 so we can remember every pattern that has ever been created
+ *
+ * @param grid world array
+ * @return String that consists out of 0 and 1 to remember earlier patterns
+ */
+static String getStateAsString(boolean[][] grid) {
+    StringBuilder sb = new StringBuilder();
+
+    for (boolean[] row : grid) {
+        for (int c = 0; c < grid[0].length; c++) {
+            sb.append(row[c] ? "1" : "0");
+        }
+    }
+
+    return sb.toString();
+}
+
+/**
+ * creates a string of 0 and 1 so we can remember every pattern that has ever been created
+ *
+ * @param wantedPattern to choose between n different patterns to test from
+ * @return 2D boolean grid map for testing
+ */
+private static boolean[][] getTestPattern(int wantedPattern) {
+    switch (wantedPattern) {
+        case 1 -> {
+            return new boolean[][]{{false, false, false, false}, {false, true, true, false}, {false, true, true, false}, {false, false, false, false}}; // pattern repeats
+        }
+
+        case 2 -> {
+            return new boolean[][]{{false, false, false, false, false}, {false, false, true, false, false}, {false, false, true, false, false}, {false, false, true, false, false}, {false, false, false, false, false}}; //   generation 0 == vertikal
+            //      generation 1 == horizontal
+            //      generation 2 == vertikal
+            //      erkennt Wiederholung und  stoppt
+        }
+
+        case 3 -> {
+            return new boolean[][]{{false, true, false, false, false}, {false, false, true, false, false}, {true, true, true, false, false}, {false, false, false, false, false}, {false, false, false, false, false}}; // stops because of repeating after 20gen
+        }
+
+        case 4 -> {
+            return new boolean[][]{{false, false, false}, {false, true, false}, {false, false, false}}; // everything dies first gen
+        }
+    }
+
+    System.out.println("invalid pattern index");
+    return new boolean[][]{};
 }
