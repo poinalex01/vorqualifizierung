@@ -1,3 +1,4 @@
+import java.util.EmptyStackException;
 import java.util.List;
 
 public class MyStack {
@@ -55,7 +56,7 @@ public class MyStack {
 
     private void checkIfOutOfBounds() {
         if (size == 0)
-            throw new IndexOutOfBoundsException("No elements available!");
+            throw new EmptyStackException();
     }
 
     /**
