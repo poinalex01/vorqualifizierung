@@ -2,11 +2,10 @@ import java.util.Scanner;
 
 public class TaschenrechnerV42_Erweitert {
     static String OPERATIONS = "+-*/";
-    static String NOT_ENOUGH_ITEMS_MESSAGE = "Zu wenige Werte im Stack!";
+    static Scanner scanner = new Scanner(System.in);
+    static MyStack stack = new MyStack();
 
     static void main() {
-        Scanner scanner = new Scanner(System.in);
-        MyStack stack = new MyStack();
 
         while (true) {
             System.out.println("Stack: " + stack);
@@ -14,13 +13,10 @@ public class TaschenrechnerV42_Erweitert {
 
             String input = scanner.nextLine();
             try {
-                if (input.matches("\\d+(\\.\\d+)?")) {
+                if (input.matches("-?\\d+(\\.\\d+)?")) {
                     stack.push(Double.parseDouble(input));
                 } else if (OPERATIONS.contains(input)) {
-                    if (stack.size() < 2) {
-                        System.out.println(NOT_ENOUGH_ITEMS_MESSAGE);
-                        continue;
-                    }
+                    checkSize(2);
 
                     double num1 = stack.pop();
                     double num2 = stack.pop();
@@ -32,26 +28,17 @@ public class TaschenrechnerV42_Erweitert {
                         case "/" -> stack.push(num2 / num1);
                     }
                 } else if (input.equals("sqrt")) {
-                    if (stack.size() < 1) {
-                        System.out.println(NOT_ENOUGH_ITEMS_MESSAGE);
-                        continue;
-                    }
+                    checkSize(1);
 
                     double a = stack.pop();
                     stack.push(Math.sqrt(a));
                 } else if (input.equals("inv")) {
-                    if (stack.size() < 1) {
-                        System.out.println(NOT_ENOUGH_ITEMS_MESSAGE);
-                        continue;
-                    }
+                    checkSize(1);
 
                     double a = stack.pop();
                     stack.push(1.0 / a);
                 } else if (input.equals("fact") || input.equals("!")) {
-                    if (stack.size() < 1) {
-                        System.out.println(NOT_ENOUGH_ITEMS_MESSAGE);
-                        continue;
-                    }
+                    checkSize(1);
 
                     double num = stack.pop();
 
@@ -63,26 +50,17 @@ public class TaschenrechnerV42_Erweitert {
                 } else if (input.equals("pi")) {
                     stack.push(Math.PI);
                 } else if (input.equals("dup")) {
-                    if (stack.size() < 1) {
-                        System.out.println(NOT_ENOUGH_ITEMS_MESSAGE);
-                        continue;
-                    }
+                    checkSize(1);
 
                     double num = stack.pop();
                     stack.push(num);
                     stack.push(num);
                 } else if (input.equals("drop")) {
-                    if (stack.size() < 1) {
-                        System.out.println(NOT_ENOUGH_ITEMS_MESSAGE);
-                        continue;
-                    }
+                    checkSize(1);
 
                     stack.pop();
                 } else if (input.equals("swap")) {
-                    if (stack.size() < 2) {
-                        System.out.println(NOT_ENOUGH_ITEMS_MESSAGE);
-                        continue;
-                    }
+                    checkSize(2);
 
                     double num1 = stack.pop();
                     double num2 = stack.pop();
@@ -93,8 +71,13 @@ public class TaschenrechnerV42_Erweitert {
                     stack.clear();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
+    }
+
+    static void checkSize(int n) {
+        if (stack.size() < n)
+            throw new RuntimeException("Zu wenige Werte im Stack!");
     }
 }
