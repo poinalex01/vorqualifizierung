@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -15,9 +16,37 @@ public class Bibliothek {
         }
 
         printAllAuthors();
-        printBooksOfAuthor("J.K. Roling");
+        printBooksOfAuthor("J.K. Rowling");
         getAuthorByBook("Die Verwandlung");
+
+        System.out.println("ADDING BOOKS");
+        addBook("Alex", "BookOfLife");
+        addBooks("Alex", List.of("book1", "book2", "book3"));
         printAll();
+    }
+
+    static void addBook(String authorName, String bookName) {
+        List<String> bookList = authorBookMap.computeIfAbsent(authorName, k -> new ArrayList<>());
+
+        if (!bookList.contains(bookName)) {
+            bookList.add(bookName);
+            bookAuthorMap.put(bookName, authorName);
+            System.out.printf("Successfully added: '%s' by '%s'!\n", bookName, authorName);
+        } else {
+            System.out.printf("Book '%s' by '%s' already exists!\n", bookName, authorName);
+        }
+    }
+
+    static void addBooks(String authorName, List<String> booksToAdd) {
+        List<String> bookList = authorBookMap.computeIfAbsent(authorName, k -> new ArrayList<>());
+
+        for (String book : booksToAdd) {
+            if (!bookList.contains(book)) {
+                bookList.add(book);
+                bookAuthorMap.put(book, authorName);
+                System.out.printf("Successfully added: '%s' by '%s'!\n", book, authorName);
+            }
+        }
     }
 
     // Liste aller Autoren ausgeben
